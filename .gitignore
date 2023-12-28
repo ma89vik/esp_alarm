@@ -1,0 +1,21 @@
+# Components Unit Test Apps files
+components/**/build/
+components/**/build_*_*/
+components/**/build_*/
+components/**/sdkconfig
+components/**/sdkconfig.old
+
+#Test Apps files
+test_apps/**/build/
+test_apps/**/build_*_*/
+test_apps/**/build_*/
+test_apps/**/sdkconfig
+test_apps/**/sdkconfig.old
+
+build/
+.vscode/*
+dependencies.lock
+managed_components/
+sdkconfig
+sdkconfig.old
+*-workspace
