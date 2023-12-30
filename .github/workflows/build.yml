@@ -3,11 +3,10 @@ name: Build and Test Application
 on:
   push:
     branches:
-      - main
+      - master
 
 env:
   IDF_PATH: /opt/esp/idf
-  test_dirs: examples
 
 defaults:
   run:
@@ -22,6 +21,10 @@ jobs:
         target:
           - esp32s3
           - linux
+        test_dir:
+          - components
+          - test_apps
+          - .
     runs-on: ubuntu-22.04
     container:
       image: espressif/idf:latest
@@ -35,7 +38,7 @@ jobs:
         run: |
           . $IDF_PATH/export.sh
           idf-build-apps build \
-            -p ${{ env.test_dirs }} \
+            -p ${{ matrix.test_dir }} \
             --target ${{ matrix.target }} \
             --recursive \
             --build-dir build_${{ matrix.target }}_${{ matrix.idf-branch }}
