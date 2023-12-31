@@ -8,4 +8,3 @@ set(COMPONENTS main) # "Trim" the build. Include the minimal set of components; 
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(esp_alarm)
-spiffs_create_partition_image(storage spiffs_content FLASH_IN_PROJECT)

@@ -13,7 +13,7 @@ defaults:
     shell: bash
 
 jobs:
-  build:
+  build_component_test_apps:
     name: Build Component Test Apps
     strategy:
       fail-fast: false
@@ -50,7 +50,7 @@ jobs:
             **/build**/flasher_args.json
           if-no-files-found: error
 
-  build:
+  build_app:
     name: Build App
     strategy:
       fail-fast: false
