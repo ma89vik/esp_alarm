@@ -38,6 +38,7 @@ jobs:
             --recursive \
             --build-dir build_${{ matrix.target }}
             --default-build-targets="${{ matrix.target }}"
+            --manifest-file .build-test-rules.yml
       - name: Upload files to artifacts for run-target job
         uses: actions/upload-artifact@v3
         with:
@@ -69,7 +70,6 @@ jobs:
           idf-build-apps build \
             -p . \
             --target esp32s3 \
-            --recursive \
             --build-dir build
       - name: Upload files to artifacts for run-target job
         uses: actions/upload-artifact@v3
