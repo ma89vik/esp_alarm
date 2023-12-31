@@ -1,9 +1,15 @@
-components/screens/test_apps/test_screen:
-  enable:
-    - if: IDF_TARGET in ["esp32s3", "linux"]
+# Documentation: .gitlab/ci/README.md#manifest-file-to-control-the-buildtest-apps
+components/esp_linux_bsp:
+  disable:
+    - if: 1 == 1
+      reason: This one supports all supported targets and linux
+
+components/screens:
+  disable:
+    - if: 1 == 1
+      reason: apps have SDL dependency
 
 components/esp32-wifi-manager:
   disable:
     - if: 1 == 1
       reason: External examples
-

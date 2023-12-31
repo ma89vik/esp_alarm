@@ -1,1 +1,1 @@
-CONFIG_IDF_TARGET="linux"
+ CONFIG_IDF_TARGET="linux"
