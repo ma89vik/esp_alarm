@@ -30,7 +30,9 @@ void app_main(void)
     printf("Start display\n");
     bsp_display_start();
 
-    screens_show();
+    screen_cfg_t cfg = {};
+
+    screens_show(&cfg);
     int i = 0;
 
     test_set_weather();

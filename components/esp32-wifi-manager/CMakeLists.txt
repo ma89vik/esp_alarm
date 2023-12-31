@@ -1,3 +1,10 @@
+idf_build_get_property(target IDF_TARGET)
+
+if(${target} STREQUAL "linux")
+    return() # This component is not supported by the POSIX/Linux simulator
+endif()
+
+
 if(IDF_VERSION_MAJOR GREATER_EQUAL 4)
     idf_component_register(SRC_DIRS src
         REQUIRES log nvs_flash mdns wpa_supplicant lwip esp_http_server esp_wifi
