@@ -55,6 +55,8 @@ esp_err_t http_requester_get(char* host, char* path, char* response_data, size_t
         field, so we provide one */
     curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
 
+    curl_easy_setopt(curl_handle, CURLOPT_FOLLOWLOCATION, 1);
+
     /* get it! */
     res = curl_easy_perform(curl_handle);
 

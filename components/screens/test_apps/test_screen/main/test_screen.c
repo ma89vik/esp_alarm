@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "esp_linux_bsp.h"
+#include "bsp/esp-bsp.h"
 #include "screens.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"

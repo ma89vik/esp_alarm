@@ -1,0 +1,9 @@
+menu "ESP-Alarm"
+
+    config ESP_ALARM_DEBUG_MODE
+        bool "Enabled Debug Mode"
+        default false
+        help
+            Enable building app in debug mode
+
+endmenu

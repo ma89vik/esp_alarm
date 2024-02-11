@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "esp_linux_bsp.h"
+#include "bsp/esp-bsp.h"
 #include "lvgl.h"
 #include "esp_log.h"
 #include "esp_err.h"
@@ -15,15 +15,18 @@
 
 static const char TAG[] = "linux-bsp";
 
+static SemaphoreHandle_t display_lock = NULL;
 
 bool bsp_display_lock(uint32_t timeout)
 {
-    return true;
+    (void)timeout;
+
+    return xSemaphoreTake(display_lock, portMAX_DELAY);
 }
 
 void bsp_display_unlock()
 {
-
+    xSemaphoreGive(display_lock);
 }
 
 void bsp_display_brightness_set(uint32_t brightness)
@@ -91,10 +94,18 @@ static void lvgl_port_task(void *arg)
     vTaskDelete( NULL );
 }
 
+void fake_flash(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p)
+{
+
+}
+
+
 static void bsp_display_lcd_init()
 {
     /*Init display hardware*/
+#if CONFIG_LINUX_BSP_USE_SDL
     sdl_init();
+#endif
 
     lv_disp_draw_buf_init(&draw_buf_dsc, frame_buf, NULL, BSP_LCD_H_RES * BSP_LCD_V_RES); /*Initialize the display buffer*/
 
@@ -105,7 +116,11 @@ static void bsp_display_lcd_init()
     disp_drv.ver_res = BSP_LCD_V_RES;
 
     /*Used to copy the buffer's content to the display*/
+#if CONFIG_LINUX_BSP_USE_SDL
     disp_drv.flush_cb = sdl_display_flush;
+#else
+    disp_drv.flush_cb = fake_flash;
+#endif
 
     /*Set a display buffer*/
     disp_drv.draw_buf = &draw_buf_dsc;
@@ -115,10 +130,13 @@ static void bsp_display_lcd_init()
     /*Finally register the driver*/
     lv_disp_drv_register(&disp_drv);
 
+
 }
 
 lv_disp_t *bsp_display_start(void)
 {
+    display_lock =  xSemaphoreCreateMutex();
+
     /* LVGL init */
     lv_init();
 
@@ -131,4 +149,9 @@ lv_disp_t *bsp_display_start(void)
     xTaskCreate(lvgl_tick, "LVGL tick task", 3000, NULL, 20, NULL);
 
     return NULL;
+}
+
+esp_err_t bsp_i2c_init(void)
+{
+    return ESP_OK;
 }

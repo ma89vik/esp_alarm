@@ -1,7 +1,17 @@
 ## IDF Component Manager Manifest File
 dependencies:
-  esp_jpeg: "*"
-  espressif/esp-box-3: "^1.1.2"
+  esp_jpeg:
+    rules:
+    - if: "target in [esp32s3]"
+  lvgl/lvgl: "^8"
+  espressif/esp-box-3:
+    version: "^1.1.2"
+    rules:
+    - if: "target in [esp32s3]"
+  esp_linux_bsp:
+    path: "../components/esp_linux_bsp"
+    rules:
+    - if: "target in [linux]"
   ## Required IDF version
   idf:
     version: ">=4.1.0"
@@ -16,4 +26,7 @@ dependencies:
   #   # `public` flag doesn't have an effect dependencies of the `main` component.
   #   # All dependencies of `main` are public by default.
   #   public: true
-  mdns: "*"
+  mdns:
+    version: "*"
+    rules:
+    - if: "target in [esp32s3]"

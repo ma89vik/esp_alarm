@@ -21,11 +21,7 @@
 #include "screens.h"
 #include "weather.h"
 
-#if CONFIG_IDF_TARGET_LINUX
-#include "esp_linux_bsp.h"
-#else
 #include "bsp/esp-bsp.h"
-#endif
 
 static const char *TAG = "DISP";
 
@@ -107,6 +103,8 @@ static lv_obj_t *todo_list[TODO_ITEMS_MAX];
 
 // 0x47, 0xe0
 static lv_color_t s_clock_font_color;
+
+EventGroupHandle_t screenInitEventGroup;
 
 /*******************************************************************************
 * Public API functions
@@ -231,7 +229,10 @@ void screens_set_time(uint8_t hours, uint8_t minutes)
     assert(minutes < 61);
 
     snprintf(time_buf, sizeof(time_buf), "%02d:%02d", hours, minutes);
+
+    bsp_display_lock(0);
     lv_label_set_text(time_label, time_buf);
+    bsp_display_unlock();
 }
 
 static void app_disp_lvgl_show_settings(lv_obj_t *screen, lv_group_t *group)
@@ -327,8 +328,8 @@ static void set_weather_image(weather_type_t weather_type)
     bool img_found = false;
     for (int i = 0; i<sizeof(icon_map) / sizeof(weather_img_map_entry); i++) {
         if (weather_type == icon_map[i].type){
-
             lv_img_set_src(weather_icon, icon_map[i].img);
+
             img_found = true;
         }
     }
@@ -382,6 +383,7 @@ void screen_todo_add_string(char *item)
 {
     char str[100] = {};
     sprintf(str, "%s %s", "-", item);
+    bsp_display_lock(0);
 
     for(int i = 0; i < TODO_ITEMS_MAX; i++) {
         if(todo_list[i] == NULL)  {
@@ -390,6 +392,8 @@ void screen_todo_add_string(char *item)
             break;
         }
     }
+    bsp_display_unlock();
+
 }
 
 static void desktop_create_todo_widget(lv_obj_t *parent)
