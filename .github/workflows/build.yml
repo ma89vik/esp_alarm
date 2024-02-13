@@ -32,12 +32,13 @@ jobs:
       - name: Build Test Application with ESP-IDF
         run: |
           . $IDF_PATH/export.sh
+          ls
           idf-build-apps build \
             -p components \
             --target ${{ matrix.target }} \
             --recursive \
-            --build-dir build_${{ matrix.target }}
-            --default-build-targets="${{ matrix.target }}"
+            --build-dir build_${{ matrix.target }} \
+            --default-build-targets="${{ matrix.target }}" \
             --manifest-file .build-test-rules.yml
       - name: Upload files to artifacts for run-target job
         uses: actions/upload-artifact@v3
@@ -67,10 +68,7 @@ jobs:
       - name: Build Test Application with ESP-IDF
         run: |
           . $IDF_PATH/export.sh
-          idf-build-apps build \
-            -p . \
-            --target esp32s3 \
-            --build-dir build
+          idf.py -D SDKCONFIG_DEFAULTS="sdkconfig.common;sdkconfig.debug" build
       - name: Upload files to artifacts for run-target job
         uses: actions/upload-artifact@v3
         with:
