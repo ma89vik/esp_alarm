@@ -12,3 +12,5 @@ struct todo_item
 esp_err_t todo_list_update(char *apikey);
 
 struct todo_item* todo_list_foreach(struct todo_item *todo);
+
+void todo_list_clear();

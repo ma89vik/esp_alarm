@@ -36,7 +36,7 @@ esp_err_t todo_list_update(char *apikey)
 
     ESP_GOTO_ON_ERROR(todo_list_parse_response(response_data), err, TAG, "Failed to parse TODO_LIST data");
 
-
+    free(response_data);
 
 err:
     return ret;
@@ -85,5 +85,15 @@ struct todo_item * todo_list_foreach(struct todo_item *todo)
         return TAILQ_FIRST(&todo_list);
     } else {
         return TAILQ_NEXT(todo, todo_items);
+    }
+}
+
+void todo_list_clear()
+{
+    struct todo_item *todo;
+    while((todo = TAILQ_FIRST(&todo_list))) {
+        TAILQ_REMOVE(&todo_list, todo, todo_items);
+        free(todo->todo_str);
+        free(todo);
     }
 }

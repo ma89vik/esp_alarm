@@ -126,8 +126,13 @@ static void wifi_task(void *pv)
     vTaskDelay(pdMS_TO_TICKS(3000));
 #endif
 
+#if CONFIG_ESP_ALARM_DEBUG_MODE
+    const uint32_t UPDATE_INTERVAL_WEATHER_MS = 60*1000; // 1 minute
+    const uint32_t UPDATE_INTERVAL_TODO_MS    = 60*1000;   // 1 minute
+#else
     const uint32_t UPDATE_INTERVAL_WEATHER_MS = 60*60*1000; // 1 hour
     const uint32_t UPDATE_INTERVAL_TODO_MS    = 60*1000;   // 1 minute
+#endif
 
     const uint32_t MIN_UPDATE_INTERVAL = MIN(UPDATE_INTERVAL_WEATHER_MS, UPDATE_INTERVAL_TODO_MS);
     const uint32_t MAX_UPDATE_INTERVAL = MAX(UPDATE_INTERVAL_WEATHER_MS, UPDATE_INTERVAL_TODO_MS);
@@ -154,6 +159,7 @@ static void wifi_task(void *pv)
                 screen_todo_add_string(item->todo_str);
 
             }
+            todo_list_clear();
         }
 
         /* Refresh information */
