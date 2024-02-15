@@ -25,14 +25,15 @@ jobs:
       image: espressif/idf:latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install Python Dependencies
+      - name: Install Test Dependencies
         run: |
           . $IDF_PATH/export.sh
           python -m pip install idf-build-apps
+          apt update
+          apt install libcurl4-gnutls-dev
       - name: Build Test Application with ESP-IDF
         run: |
           . $IDF_PATH/export.sh
-          ls
           idf-build-apps build \
             -p components \
             --target ${{ matrix.target }} \
